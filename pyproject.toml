@@ -5,7 +5,7 @@ description = "MCP server for isolated function emulation with Unicorn"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-authors = [{ name = "WeAreMS" }]
+authors = [{ name = "RivaExits0" }]
 keywords = ["mcp", "unicorn", "reverse-engineering", "emulation"]
 dependencies = [
     "mcp>=1.0",
