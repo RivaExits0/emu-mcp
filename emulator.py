@@ -348,6 +348,9 @@ class EmuSession:
                 uc.mem_write(cur, val.to_bytes(8, "little"))
             cur -= ws
             uc.mem_write(cur, SENTINEL.to_bytes(ws, "little"))
+            if cur % 16 != 8:
+                cur -= 8
+                uc.mem_write(cur, b"\x00" * 8)
             uc.reg_write(C.UC_X86_REG_RSP, cur)
             uc.reg_write(C.UC_X86_REG_RIP, pc)
         elif self.arch == "arm":
@@ -359,6 +362,8 @@ class EmuSession:
             for a in reversed(arg_ints[4:]):
                 cur -= ws
                 uc.mem_write(cur, a.to_bytes(ws, "little"))
+            if cur % 8:
+                cur -= cur % 8
             uc.reg_write(C.UC_ARM_REG_SP, cur)
             uc.reg_write(C.UC_ARM_REG_PC, pc)
             lr_val = SENTINEL | (1 if self.thumb else 0)
@@ -398,7 +403,12 @@ class EmuSession:
     # ---------- stub handling ----------
 
     def add_stub(self, addr, return_value, name=None):
-        st = Stub(addr=addr, return_value=self._to_int(return_value), name=name)
+        if isinstance(return_value, float):
+            import struct
+            rv = struct.unpack("<Q", struct.pack("<d", return_value))[0]
+        else:
+            rv = self._to_int(return_value)
+        st = Stub(addr=addr, return_value=rv, name=name)
         self.hooks.append(st)
         return st
 
