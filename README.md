@@ -1,6 +1,6 @@
 # emu-mcp
 
-[![CI](https://github.com/WeAreMS/emu-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/WeAreMS/emu-mcp/actions/workflows/ci.yml)
+[![CI](https://github.com/RivaExits0/emu-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/RivaExits0/emu-mcp/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 
@@ -33,7 +33,7 @@ pip install "mcp>=1.0" unicorn capstone lief
 Or from source:
 
 ```bash
-git clone https://github.com/WeAreMS/emu-mcp.git
+git clone https://github.com/RivaExits0/emu-mcp.git
 cd emu-mcp
 pip install -e .
 ```
