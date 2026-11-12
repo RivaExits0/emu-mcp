@@ -2,7 +2,11 @@
 name = "emu-mcp"
 version = "0.1.0"
 description = "MCP server for isolated function emulation with Unicorn"
+readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "WeAreMS" }]
+keywords = ["mcp", "unicorn", "reverse-engineering", "emulation"]
 dependencies = [
     "mcp>=1.0",
     "unicorn>=2.0",
@@ -12,3 +16,7 @@ dependencies = [
 
 [project.scripts]
 emu-mcp = "server:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
