@@ -17,6 +17,11 @@ dependencies = [
 [project.scripts]
 emu-mcp = "server:main"
 
+[tool.setuptools]
+# flat layout with several top level modules: list them explicitly so that
+# the package can be built and installed
+py-modules = ["server", "emulator", "loader"]
+
 [build-system]
 requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"

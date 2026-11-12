@@ -1,0 +1,2 @@
+[console_scripts]
+emu-mcp = server:main

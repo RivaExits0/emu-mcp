@@ -84,7 +84,9 @@ def main():
     SESSION.load(SAMPLE_BIN)
     out = SESSION.trace(add_addr, args=[5, 7], limit=6)
     print(out)
-    assert len(out.splitlines()) <= 6
+    addresses = [line for line in out.splitlines() if line.startswith("  0x")]
+    assert len(addresses) <= 6
+    assert out.startswith("stop: returned")
 
     print("\nALL DEMO CHECKS PASSED")
 

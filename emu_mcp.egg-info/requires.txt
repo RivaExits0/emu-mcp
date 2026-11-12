@@ -1,0 +1,4 @@
+mcp>=1.0
+unicorn>=2.0
+capstone>=5.0
+lief>=0.14
