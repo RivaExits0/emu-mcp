@@ -116,5 +116,3 @@ loader.py      LIEF-based binary parsing and segment mapping
 ## License
 
 MIT — see [LICENSE](LICENSE).
-EOF
-echo done

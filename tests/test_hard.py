@@ -133,5 +133,11 @@ def main():
 
     print("\nALL HARD TESTS PASSED")
 
+
+def test_hard_suite():
+    """Pytest entry point: runs the full hard-test scenario set."""
+    main()
+
+
 if __name__ == "__main__":
     main()

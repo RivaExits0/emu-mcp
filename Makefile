@@ -15,11 +15,14 @@ tests/hooktest: tests/hooktest.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 test: all
-	python3 tests/test_emu.py
+	python3 -m pytest -q
 	python3 tests/test_hard.py
+
+demo: all
 	python3 examples/demo.py
 
 clean:
 	rm -f $(BINARIES)
+	find . -name '__pycache__' -type d -prune -exec rm -rf {} +
 
-.PHONY: all test clean
+.PHONY: all test demo clean
