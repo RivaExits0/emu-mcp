@@ -1,0 +1,14 @@
+[project]
+name = "emu-mcp"
+version = "0.1.0"
+description = "MCP server for isolated function emulation with Unicorn"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0",
+    "unicorn>=2.0",
+    "capstone>=5.0",
+    "lief>=0.14",
+]
+
+[project.scripts]
+emu-mcp = "server:main"

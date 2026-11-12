@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+tests/*
+!tests/*.c
+!tests/*.py
+examples/__pycache__/
