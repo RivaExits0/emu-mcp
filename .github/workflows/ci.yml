@@ -2,27 +2,45 @@ name: CI
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
-    branches: [main, master]
+    branches: [main]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.10", "3.11", "3.12"]
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Install system dependencies
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install system dependencies (Linux only)
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-x86-64-linux-gnu binutils
+
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install "mcp>=1.0" unicorn capstone lief pytest
+          pip install -e .[dev]
+
+      - name: Build test binaries (Linux only)
+        if: runner.os == 'Linux'
+        run: make all
+
       - name: Run test suite
-        run: make test
+        run: pytest -q
+
       - name: Run demo
         run: python examples/demo.py

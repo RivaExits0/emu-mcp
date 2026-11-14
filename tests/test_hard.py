@@ -1,6 +1,7 @@
 import os, subprocess, sys, struct
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from emulator import SESSION
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"))
+from emu_mcp.emulator import SESSION
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BIN = os.path.join(ROOT, "tests", "hardtest_x64")

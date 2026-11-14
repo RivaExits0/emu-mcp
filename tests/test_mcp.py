@@ -63,9 +63,12 @@ def symbol(binary, name):
 
 @contextlib.asynccontextmanager
 async def server_session():
-    params = StdioServerParameters(command=sys.executable,
-                                   args=[os.path.join(ROOT, "server.py")],
-                                   cwd=ROOT)
+    params = StdioServerParameters(
+        command="emu-mcp",
+        args=[],
+        cwd=ROOT,
+        env={**os.environ, "PYTHONPATH": os.path.join(ROOT, "src")}
+    )
     async with stdio_client(params) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()

@@ -13,6 +13,8 @@ or network are emulated; unknown calls stop execution and report their address.
 > doğrulamak için kullanılır. Hiçbir syscall, dosya sistemi veya ağ emüle
 > edilmez; bilinmeyen çağrılar durdurulur ve adresi raporlanır.
 
+---
+
 ## Why
 
 When reverse-engineering a binary, you form hypotheses about what a function
@@ -21,11 +23,13 @@ emulator and check the result, instead of trusting the guess.
 
 Supported architectures: **x86, x64, arm, arm64**.
 
+---
+
 ## Features
 
 - Parse ELF / PE / Mach-O binaries with LIEF and auto-detect architecture.
 - Emulate a single function with arguments passed per calling convention
-  (System V AMD64 ARM64, etc.).
+  (System V AMD64, ARM64, etc.).
 - Pre-write memory inputs, read/write memory, stub libc/API calls.
 - Trace executed addresses and memory reads/writes (paginated with limit/offset).
 - Hard limits on instruction count and wall-clock time to prevent runaway emulation.
@@ -35,27 +39,62 @@ Supported architectures: **x86, x64, arm, arm64**.
 - No syscalls, filesystem, or network are emulated.
 - Unknown calls stop execution and report their address.
 
+---
+
 ## Install
 
+### From PyPI (when published)
 ```bash
-pip install "mcp>=1.0" unicorn capstone lief
+pip install emu-mcp
 ```
 
-Or from source:
+### From GitHub
+```bash
+pip install git+https://github.com/RivaExits0/emu-mcp.git
+```
 
+### From Source
 ```bash
 git clone https://github.com/RivaExits0/emu-mcp.git
 cd emu-mcp
-pip install -e .
+pip install -e .[dev]    # or just `pip install -e .` for production
 ```
+
+> **System requirements (Linux):** `gcc-x86-64-linux-gnu` and `binutils` for building test binaries. On Windows, cross-compilation is not required for the test suite.
+
+---
 
 ## Run
 
 ```bash
-python server.py
+emu-mcp
+# or
+python -m emu_mcp
 ```
 
 The server speaks MCP over **stdio**.
+
+---
+
+## Claude Desktop Integration
+
+Add to `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "emu-mcp": {
+      "command": "emu-mcp",
+      "args": [],
+      "env": {}
+    }
+  }
+}
+```
+
+> **Windows:** If installed via pip, `emu-mcp` should be on PATH. Otherwise use full path: `C:\\path\\to\\emu-mcp\\.venv\\Scripts\\emu-mcp.exe`.
+
+---
 
 ## OpenCode Integration
 
@@ -66,12 +105,14 @@ Add to `opencode.json`:
   "mcp": {
     "emu": {
       "type": "local",
-      "command": ["python", "/path/to/emu-mcp/server.py"],
+      "command": ["emu-mcp"],
       "enabled": true
     }
   }
 }
 ```
+
+---
 
 ## MCP Tools
 
@@ -84,6 +125,8 @@ Add to `opencode.json`:
 | `emu_write_mem(addr, data_hex)` | Write hex data to emulated memory. | To set up inputs before `emu_run`. |
 | `emu_hook_call(addr, return_value, name=None)` | Stub a call (malloc, strlen, …) with a fixed return value. | To avoid calling unsupported libc functions. |
 | `emu_reset()` | Reset the emulation session (clear memory, registers, hooks). | Between unrelated emulations. |
+
+---
 
 ### Tool: `emu_load`
 
@@ -105,6 +148,8 @@ Add to `opencode.json`:
 }
 ```
 
+---
+
 ### Tool: `emu_run`
 
 **Example call:**
@@ -121,6 +166,8 @@ Add to `opencode.json`:
   "registers": {"rax": 12, "rip": "0x4011db", ...}
 }
 ```
+
+---
 
 ### Tool: `emu_trace`
 
@@ -139,10 +186,34 @@ called addresses:
   0x4011d8
 ```
 
+---
+
+## Supported Architectures
+
+| Architecture | Calling Convention | Status |
+|--------------|-------------------|--------|
+| x86 (32-bit) | cdecl | ✅ |
+| x64 (64-bit) | System V AMD64 | ✅ |
+| ARM (32-bit) | AAPCS | ✅ |
+| ARM64 (AArch64) | AAPCS64 | ✅ |
+
+---
+
 ## Testing
 
 ```bash
+# Build test binaries (Linux only)
+make all
+
+# Run test suite
+pytest -q
+# or
 make test
+
+# Run demo
+make demo
+# or
+python examples/demo.py
 ```
 
 Runs `tests/test_emu.py`, `tests/test_hard.py`, and `examples/demo.py`.
@@ -172,19 +243,27 @@ result=12 stop=returned insns=11
 ALL DEMO CHECKS PASSED
 ```
 
+---
+
 ## Architecture
 
 ```
-server.py      MCP tool definitions (stdio transport)
-emulator.py    Unicorn engine, calling conventions, hooks, tracing
-loader.py      LIEF-based binary parsing and segment mapping
+src/emu_mcp/
+├── server.py      MCP tool definitions (stdio transport)
+├── emulator.py    Unicorn engine, calling conventions, hooks, tracing
+├── loader.py      LIEF-based binary parsing and segment mapping
+└── platform_utils.py  Cross-platform paths, subprocess, file I/O
 ```
+
+---
 
 ## Pagination (`limit` / `offset`)
 
 `emu_trace` supports `limit` and `offset` for long trace lists:
 - `limit`: maximum number of trace lines to return (default 50)
 - `offset`: number of trace lines to skip (default 0)
+
+---
 
 ## Security Notes
 
@@ -193,12 +272,37 @@ loader.py      LIEF-based binary parsing and segment mapping
 - Instruction count and wall-clock timeouts prevent runaway emulation.
 - Memory is isolated per session; `emu_reset` clears state.
 
+---
+
 ## Limitations
 
 - No real syscall emulation; unknown calls stop execution.
 - No filesystem or network access inside the emulator.
 - Floating-point support is limited to XMM register stubs.
 - Stack alignment follows System V AMD64 ABI; other ABIs may need adjustment.
+
+---
+
+## 🔗 Related Projects
+
+- **forge-mcp** — Game modding toolkit (hex, PE, APK, Unity, Unreal, tables). Use for hex editing, signature generation, APK repacking.
+- **henry-mcp** — Static compatibility analysis for EXE/DLL/APK/Kotlin. Use for checking module compatibility.
+- **crash-mcp** — Crash dump analysis (ELF core + Windows minidump). Use for post-mortem debugging.
+
+---
+
+## 📦 Release
+
+- **Latest:** [v0.1.0](https://github.com/RivaExits0/emu-mcp/releases/tag/v0.1.0)
+- **Install from release:** `pip install git+https://github.com/RivaExits0/emu-mcp.git@v0.1.0`
+
+### Create Release
+```bash
+git tag -a v0.1.0 -m "emu-mcp v0.1.0: Initial release"
+git push origin v0.1.0
+```
+
+---
 
 ## License
 

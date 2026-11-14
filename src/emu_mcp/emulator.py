@@ -18,7 +18,7 @@ from unicorn import (
 )
 import capstone
 
-from loader import LoadedBinary, load_binary
+from emu_mcp.loader import LoadedBinary, load_binary
 
 
 PAGE = 0x1000

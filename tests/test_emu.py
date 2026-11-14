@@ -4,8 +4,9 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"))
 from common import ROOT, TESTS, build, nm_addr  # noqa: E402
-from emulator import SESSION  # noqa: E402
+from emu_mcp.emulator import SESSION  # noqa: E402
 
 BASE = TESTS
 BIN = os.path.join(BASE, "sample_x64")

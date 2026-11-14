@@ -6,8 +6,9 @@ import sys
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"))
 from common import ROOT, TESTS, build, nm_addr  # noqa: E402
-from emulator import MAX_MEM_INPUT, MAX_READ, MAX_WRITE, SESSION  # noqa: E402
+from emu_mcp.emulator import MAX_MEM_INPUT, MAX_READ, MAX_WRITE, SESSION  # noqa: E402
 
 SAMPLE_BIN = os.path.join(TESTS, "sample_x64")
 HARD_BIN = os.path.join(TESTS, "hardtest_x64")

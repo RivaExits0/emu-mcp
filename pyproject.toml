@@ -6,7 +6,20 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "RivaExits0" }]
-keywords = ["mcp", "unicorn", "reverse-engineering", "emulation"]
+keywords = ["mcp", "model-context-protocol", "unicorn", "reverse-engineering", "emulation", "binary-analysis"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Debuggers",
+    "Topic :: Security",
+    "Topic :: Utilities",
+]
 dependencies = [
     "mcp>=1.0",
     "unicorn>=2.0",
@@ -18,15 +31,20 @@ dependencies = [
 dev = ["pytest"]
 
 [project.scripts]
-emu-mcp = "server:main"
+emu-mcp = "emu_mcp.server:main"
 
-[tool.setuptools]
-py-modules = ["server", "emulator", "loader", "platform_utils"]
+[project.urls]
+Homepage = "https://github.com/RivaExits0/emu-mcp"
+Issues = "https://github.com/RivaExits0/emu-mcp/issues"
+Repository = "https://github.com/RivaExits0/emu-mcp"
 
 [build-system]
 requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["."]
+pythonpath = ["src"]

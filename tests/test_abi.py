@@ -9,9 +9,12 @@ import os
 import struct
 
 import pytest
+import sys
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"))
 from common import ROOT, TESTS, TOOLCHAIN, build, have
-from emulator import SESSION
+from emu_mcp.emulator import SESSION
 
 ARCHES = ["x64", "x86", "arm64", "arm"]
 SRC = os.path.join(TESTS, "abi.c")

@@ -10,7 +10,7 @@ try:  # mcp v1
 except Exception:  # mcp v2 renamed FastMCP to MCPServer
     from mcp.server.mcpserver import MCPServer as FastMCP
 
-from emulator import DEFAULT_MAX_INSNS, DEFAULT_TIMEOUT_MS, MAX_READ, SESSION
+from emu_mcp.emulator import DEFAULT_MAX_INSNS, DEFAULT_TIMEOUT_MS, MAX_READ, SESSION
 
 mcp = FastMCP("emu")
 
