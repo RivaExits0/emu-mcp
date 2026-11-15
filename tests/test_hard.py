@@ -1,4 +1,5 @@
-import os, subprocess, sys, struct
+import os, shutil, subprocess, sys, struct
+import pytest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"))
 from emu_mcp.emulator import SESSION
@@ -8,6 +9,8 @@ BIN = os.path.join(ROOT, "tests", "hardtest_x64")
 
 def ensure():
     if not os.path.exists(BIN):
+        if shutil.which("x86_64-linux-gnu-gcc") is None:
+            pytest.skip("x86_64-linux-gnu-gcc is not available; ELF fixtures cannot be built")
         src = os.path.join(ROOT, "tests", "hardtest.c")
         subprocess.check_call(["x86_64-linux-gnu-gcc", "-O0", "-g", "-fno-pie", "-no-pie", "-o", BIN, src])
 

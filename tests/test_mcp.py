@@ -47,8 +47,8 @@ def ensure_binaries():
         build(os.path.join(TESTS, "sample.c"), SAMPLE_BIN, "x86_64-linux-gnu-gcc")
     if not os.path.exists(ABI_BIN):
         build(os.path.join(TESTS, "abi.c"), ABI_BIN, "x86_64-linux-gnu-gcc")
-    assert os.path.exists(SAMPLE_BIN), "sample_x64 could not be built"
-    assert os.path.exists(ABI_BIN), "abi_x64 could not be built"
+    if not os.path.exists(SAMPLE_BIN) or not os.path.exists(ABI_BIN):
+        pytest.skip("x86_64-linux-gnu-gcc is not available; ELF fixtures cannot be built")
 
 
 def symbol(binary, name):
