@@ -10,7 +10,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
-from emulator import SESSION
+sys.path.insert(0, os.path.join(ROOT, "src"))
+from emu_mcp.emulator import SESSION
 
 SAMPLE_C = os.path.join(ROOT, "tests", "sample.c")
 SAMPLE_BIN = os.path.join(ROOT, "tests", "sample_x64")
